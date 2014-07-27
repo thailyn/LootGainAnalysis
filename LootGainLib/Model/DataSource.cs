@@ -59,5 +59,25 @@ namespace LootGainLib.Model
             Auras = new List<Aura>();
             Loot = new List<Loot>();
         }
+
+        public bool HasLoot(int itemId)
+        {
+            foreach (var loot in Loot)
+            {
+                if (loot.ItemLink != null)
+                {
+                    var itemInfo = ItemInfo.ParseItemString(loot.ItemLink);
+                    if (itemInfo.LinkType == LinkType.Item)
+                    {
+                        if (itemInfo.Id == itemId)
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+
+            return false;
+        }
     }
 }

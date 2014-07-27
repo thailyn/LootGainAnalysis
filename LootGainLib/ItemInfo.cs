@@ -7,10 +7,18 @@ using System.Threading.Tasks;
 
 namespace LootGainLib
 {
+    public enum LinkType
+    {
+        Unknown,
+        Item,
+        Currency,
+    }
+
     public class ItemInfo
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public LinkType LinkType { get; set; }
 
         public static ItemInfo ParseItemString(string itemString)
         {
@@ -25,10 +33,31 @@ namespace LootGainLib
             var itemInfo = new ItemInfo
             {
                 Id = int.Parse(match.Groups[3].Value),
-                Name = match.Groups[14].Value
+                Name = match.Groups[14].Value,
+                LinkType = ParseLinkType(match.Groups[2].Value),
             };
 
             return itemInfo;
+        }
+
+        public static LinkType ParseLinkType(string linkTypeString)
+        {
+            if (string.IsNullOrWhiteSpace(linkTypeString))
+            {
+                return LinkType.Unknown;
+            }
+
+            if (string.Equals(linkTypeString, "item", StringComparison.CurrentCultureIgnoreCase))
+            {
+                return LinkType.Item;
+            }
+
+            if (string.Equals(linkTypeString, "currency", StringComparison.CurrentCultureIgnoreCase))
+            {
+                return LinkType.Currency;
+            }
+
+            throw new Exception();
         }
     }
 }

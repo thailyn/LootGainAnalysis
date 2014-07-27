@@ -35,7 +35,9 @@ namespace LootGainConsole
             attributeValues.FindValues(sources);
             System.Console.WriteLine("Done finding attribute values.");
 
-
+            int itemId = int.Parse(args[1]);
+            var entropy = sources.EntropyOnItemId(itemId);
+            System.Console.WriteLine("Base entropy: {0}", entropy);
 
             System.Console.ReadLine();
         }
