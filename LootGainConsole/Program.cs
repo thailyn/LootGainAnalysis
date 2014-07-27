@@ -36,7 +36,21 @@ namespace LootGainConsole
             attributeValues.FindValues(sources);
             System.Console.WriteLine("Done finding attribute values.");
 
-            int itemId = int.Parse(args[1]);
+            var rand = new Random();
+            int index = rand.Next(attributeValues.ValuesMap[LootGainLib.Attribute.Loot].Keys.Count);
+            int itemId = (int)attributeValues.ValuesMap[LootGainLib.Attribute.Loot].Keys.ToList()[index];
+            var loot = (from s in sources
+                       from l in s.Loot
+                       where !string.IsNullOrWhiteSpace(l.ItemLink)
+                       where l.ItemLink.Contains(itemId.ToString())
+                       select l).FirstOrDefault();
+            var item = ItemInfo.ParseItemString(loot.ItemLink);
+            System.Console.WriteLine("Item id: {0}, Item Name: {1}", item.Id, item.Name);
+            //itemId = 6303;
+            //itemId = 45191;
+            //itemId = 82261;
+
+            //int itemId = int.Parse(args[1]);
             var entropy = sources.EntropyOnItemId(itemId);
             System.Console.WriteLine("Base entropy: {0}", entropy);
 
@@ -50,12 +64,22 @@ namespace LootGainConsole
             System.Console.WriteLine("Information gain on zone name: {0}", informationGain);
              * */
 
+            /*
             LootGainLib.Attribute bestAttribute;
             object bestAttributeValue;
             double bestInformationGain = sources.FindGreatestInformationGain(itemId, attributeValues,
                 out bestAttribute, out bestAttributeValue);
             System.Console.WriteLine("Completed finding greatest information gain.  Attribute {0} with value {1} at {2}.",
                 bestAttribute.ToString(), bestAttributeValue, bestInformationGain);
+             * */
+
+            DecisionTreeNode rootNode = new DecisionTreeNode()
+            {
+                Sources = sources,
+                ItemId = itemId,
+            };
+            rootNode.CreateChildrenOnItemId(itemId, attributeValues);
+            rootNode.ConsolePrint(string.Empty);
 
             System.Console.ReadLine();
         }

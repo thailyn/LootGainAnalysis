@@ -41,6 +41,7 @@
   <ItemGroup>
     <Compile Include="AttributeValues.cs" />
     <Compile Include="DataSourcesCollection.cs" />
+    <Compile Include="DecisionTreeNode.cs" />
     <Compile Include="ItemInfo.cs" />
     <Compile Include="Model\Aura.cs" />
     <Compile Include="Model\DataSource.cs" />
