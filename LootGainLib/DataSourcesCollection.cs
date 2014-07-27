@@ -10,6 +10,8 @@ namespace LootGainLib
 {
     public class DataSourcesCollection : ObservableCollection<DataSource>
     {
+        public bool UseAttributesWithValues { get; set; }
+
         public void DivideOnAttribute(Attribute attribute, object attributeValue,
             Dictionary<object, int> attributeValues, out Dictionary<object, DataSourcesCollection> splits)
         {
@@ -134,6 +136,63 @@ namespace LootGainLib
             }
 
             return baseEntropy - sum;
+        }
+
+        public double FindGreatestInformationGain(int itemId, AttributeValues attributeValues,
+            out Attribute bestAttribute, out object bestAttributeValue)
+        {
+            double bestInformationGain = double.MinValue;
+            bestAttribute = Attribute.Build; // Set these to some initial value so they are set
+            bestAttributeValue = null;       // at least once at compile time.
+
+            foreach (var attribute in Enum.GetValues(typeof(LootGainLib.Attribute)).Cast<LootGainLib.Attribute>())
+            {
+                switch (attribute)
+                {
+                    case LootGainLib.Attribute.Quest:
+                        if (!UseAttributesWithValues)
+                        {
+                            break;
+                        }
+
+                        foreach (int quest in attributeValues.ValuesMap[LootGainLib.Attribute.Quest].Keys)
+                        {
+                            var questInformationGain = this.InformationGainOnItemId(itemId, attribute, quest,
+                                attributeValues.ValuesMap[attribute]);
+                            if (questInformationGain > bestInformationGain)
+                            {
+                                bestInformationGain = questInformationGain;
+                                bestAttribute = attribute;
+                                bestAttributeValue = quest;
+
+                                System.Console.WriteLine("New best information gain: Quest {0} at {1}",
+                                    quest, questInformationGain);
+                            }
+                            //System.Console.WriteLine("Information gain on quest {0}: {1}", quest,
+                            //    questInformationGain);
+                        }
+                        break;
+                    case LootGainLib.Attribute.Loot:
+                        break;
+                    default:
+                        var loopInformationGain = this.InformationGainOnItemId(itemId, attribute, null,
+                            attributeValues.ValuesMap[attribute]);
+                        if (loopInformationGain > bestInformationGain)
+                        {
+                            bestInformationGain = loopInformationGain;
+                            bestAttribute = attribute;
+                            bestAttributeValue = null;
+
+                            System.Console.WriteLine("New best information gain: {0} at {1}",
+                                attribute.ToString(), loopInformationGain);
+                        }
+                        //System.Console.WriteLine("Information gain on {0}: {1}", attribute.ToString(),
+                        //    loopInformationGain);
+                        break;
+                }
+            }
+
+            return bestInformationGain;
         }
     }
 }

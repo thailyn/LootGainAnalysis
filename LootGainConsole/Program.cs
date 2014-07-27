@@ -28,6 +28,7 @@ namespace LootGainConsole
 
             var parser = new FileParser();
             var sources = parser.Parse(args[0]);
+            sources.UseAttributesWithValues = false;
 
             System.Console.WriteLine("Done parsing.  Parsed {0} data sources.", sources.Count);
 
@@ -49,29 +50,12 @@ namespace LootGainConsole
             System.Console.WriteLine("Information gain on zone name: {0}", informationGain);
              * */
 
-            foreach (var attribute in Enum.GetValues(typeof(LootGainLib.Attribute)).Cast<LootGainLib.Attribute>())
-            {
-                switch (attribute)
-                {
-                    case LootGainLib.Attribute.Quest:
-                        foreach (int quest in attributeValues.ValuesMap[LootGainLib.Attribute.Quest].Keys)
-                        {
-                            var questInformationGain = sources.InformationGainOnItemId(itemId, attribute, quest,
-                                attributeValues.ValuesMap[attribute]);
-                            System.Console.WriteLine("Information gain on quest {0}: {1}", quest,
-                                questInformationGain);
-                        }
-                        break;
-                    case LootGainLib.Attribute.Loot:
-                        break;
-                    default:
-                        var loopInformationGain = sources.InformationGainOnItemId(itemId, attribute, null,
-                            attributeValues.ValuesMap[attribute]);
-                        System.Console.WriteLine("Information gain on {0}: {1}", attribute.ToString(),
-                            loopInformationGain);
-                        break;
-                }
-            }
+            LootGainLib.Attribute bestAttribute;
+            object bestAttributeValue;
+            double bestInformationGain = sources.FindGreatestInformationGain(itemId, attributeValues,
+                out bestAttribute, out bestAttributeValue);
+            System.Console.WriteLine("Completed finding greatest information gain.  Attribute {0} with value {1} at {2}.",
+                bestAttribute.ToString(), bestAttributeValue, bestInformationGain);
 
             System.Console.ReadLine();
         }
