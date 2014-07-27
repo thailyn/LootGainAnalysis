@@ -10,6 +10,8 @@ namespace LootGainLib
 {
     public class DataSourcesCollection : ObservableCollection<DataSource>
     {
+        object lockObject = new Object();
+
         public bool UseAttributesWithValues { get; set; }
 
         public void DivideOnAttribute(Attribute attribute, object attributeValue,
@@ -142,10 +144,10 @@ namespace LootGainLib
             out Attribute bestAttribute, out object bestAttributeValue)
         {
             double bestInformationGain = double.MinValue;
-            bestAttribute = Attribute.Build; // Set these to some initial value so they are set
-            bestAttributeValue = null;       // at least once at compile time.
+            Attribute bestAttributeLocal = Attribute.Build;
+            object bestAttributeValueLocal = null;
 
-            foreach (var attribute in Enum.GetValues(typeof(LootGainLib.Attribute)).Cast<LootGainLib.Attribute>())
+            Parallel.ForEach(Enum.GetValues(typeof(LootGainLib.Attribute)).Cast<LootGainLib.Attribute>(), attribute =>
             {
                 switch (attribute)
                 {
@@ -161,12 +163,18 @@ namespace LootGainLib
                                 attributeValues.ValuesMap[attribute]);
                             if (questInformationGain > bestInformationGain)
                             {
-                                bestInformationGain = questInformationGain;
-                                bestAttribute = attribute;
-                                bestAttributeValue = quest;
+                                lock (lockObject)
+                                {
+                                    if (questInformationGain > bestInformationGain)
+                                    {
+                                        bestInformationGain = questInformationGain;
+                                        bestAttributeLocal = attribute;
+                                        bestAttributeValueLocal = quest;
 
-                                System.Console.WriteLine("New best information gain: Quest {0} at {1}",
-                                    quest, questInformationGain);
+                                        System.Console.WriteLine("New best information gain: Quest {0} at {1}",
+                                            quest, questInformationGain);
+                                    }
+                                }
                             }
                             //System.Console.WriteLine("Information gain on quest {0}: {1}", quest,
                             //    questInformationGain);
@@ -179,18 +187,27 @@ namespace LootGainLib
                             attributeValues.ValuesMap[attribute]);
                         if (loopInformationGain > bestInformationGain)
                         {
-                            bestInformationGain = loopInformationGain;
-                            bestAttribute = attribute;
-                            bestAttributeValue = null;
+                            lock (lockObject)
+                            {
+                                if (loopInformationGain > bestInformationGain)
+                                {
+                                    bestInformationGain = loopInformationGain;
+                                    bestAttributeLocal = attribute;
+                                    bestAttributeValueLocal = null;
 
-                            System.Console.WriteLine("New best information gain: {0} at {1}",
-                                attribute.ToString(), loopInformationGain);
+                                    System.Console.WriteLine("New best information gain: {0} at {1}",
+                                        attribute.ToString(), loopInformationGain);
+                                }
+                            }
                         }
                         //System.Console.WriteLine("Information gain on {0}: {1}", attribute.ToString(),
                         //    loopInformationGain);
                         break;
                 }
-            }
+            });
+
+            bestAttribute = bestAttributeLocal;
+            bestAttributeValue = bestAttributeValueLocal;
 
             return bestInformationGain;
         }
