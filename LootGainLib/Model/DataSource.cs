@@ -79,5 +79,18 @@ namespace LootGainLib.Model
 
             return false;
         }
+
+        public bool HasQuest(int questId)
+        {
+            foreach (var quest in Quests)
+            {
+                if (quest.QuestId == questId)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
     }
 }

@@ -39,6 +39,40 @@ namespace LootGainConsole
             var entropy = sources.EntropyOnItemId(itemId);
             System.Console.WriteLine("Base entropy: {0}", entropy);
 
+            /*
+            var informationGain = sources.InformationGainOnItemId(itemId, LootGainLib.Attribute.SourceName, null,
+                attributeValues.ValuesMap[LootGainLib.Attribute.SourceName]);
+            System.Console.WriteLine("Information gain on source name: {0}", informationGain);
+
+            informationGain = sources.InformationGainOnItemId(itemId, LootGainLib.Attribute.ZoneName, null,
+                attributeValues.ValuesMap[LootGainLib.Attribute.ZoneName]);
+            System.Console.WriteLine("Information gain on zone name: {0}", informationGain);
+             * */
+
+            foreach (var attribute in Enum.GetValues(typeof(LootGainLib.Attribute)).Cast<LootGainLib.Attribute>())
+            {
+                switch (attribute)
+                {
+                    case LootGainLib.Attribute.Quest:
+                        foreach (int quest in attributeValues.ValuesMap[LootGainLib.Attribute.Quest].Keys)
+                        {
+                            var questInformationGain = sources.InformationGainOnItemId(itemId, attribute, quest,
+                                attributeValues.ValuesMap[attribute]);
+                            System.Console.WriteLine("Information gain on quest {0}: {1}", quest,
+                                questInformationGain);
+                        }
+                        break;
+                    case LootGainLib.Attribute.Loot:
+                        break;
+                    default:
+                        var loopInformationGain = sources.InformationGainOnItemId(itemId, attribute, null,
+                            attributeValues.ValuesMap[attribute]);
+                        System.Console.WriteLine("Information gain on {0}: {1}", attribute.ToString(),
+                            loopInformationGain);
+                        break;
+                }
+            }
+
             System.Console.ReadLine();
         }
     }
