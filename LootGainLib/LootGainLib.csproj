@@ -39,6 +39,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AttributeValues.cs" />
+    <Compile Include="ItemInfo.cs" />
     <Compile Include="Model\Aura.cs" />
     <Compile Include="Model\DataSource.cs" />
     <Compile Include="Model\Item.cs" />

@@ -1,4 +1,5 @@
-﻿using LootGainLib.Parsers;
+﻿using LootGainLib;
+using LootGainLib.Parsers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +22,12 @@ namespace LootGainConsole
             var parser = new FileParser();
             var sources = parser.Parse(args[0]);
 
-            System.Console.WriteLine("Done.  Parsed {0} data sources.", sources.Count);
+            System.Console.WriteLine("Done parsing.  Parsed {0} data sources.", sources.Count);
+
+            var attributeValues = new AttributeValues();
+            attributeValues.FindValues(sources);
+            System.Console.WriteLine("Done finding attribute values.");
+
             System.Console.ReadLine();
         }
     }

@@ -57,21 +57,21 @@ namespace LootGainLib.Parsers
                     case FileParserState.Begin:
                         if (line.StartsWith(@"LootGain_Data = {"))
                         {
-                            System.Console.WriteLine("Now in data.");
+                            //System.Console.WriteLine("Now in data.");
                             state = FileParserState.InData;
                         }
                         break;
                     case FileParserState.InData:
                         if (line.StartsWith(@"	[""sources""] = {"))
                         {
-                            System.Console.WriteLine("Now in sources.");
+                            //System.Console.WriteLine("Now in sources.");
                             state = FileParserState.InSources;
                         }
                         break;
                     case FileParserState.InSources:
                         if (line.StartsWith(@"		{"))
                         {
-                            System.Console.WriteLine("Now in source.");
+                            //System.Console.WriteLine("Now in source.");
                             currentSource = new DataSource();
                             state = FileParserState.InSource;
                         }
@@ -79,7 +79,7 @@ namespace LootGainLib.Parsers
                     case FileParserState.InSource:
                         if (line.StartsWith(@"		}"))
                         {
-                            System.Console.WriteLine("Done with source.");
+                            //System.Console.WriteLine("Done with source.");
                             dataSources.Add(currentSource);
 
                             state = FileParserState.InSources;
@@ -96,7 +96,7 @@ namespace LootGainLib.Parsers
                         if (currentSource.DataVersion != 6)
                         {
                             state = FileParserState.RunOutSource;
-                            System.Console.WriteLine("Found a source with an old data version.  Skipping.");
+                            //System.Console.WriteLine("Found a source with an old data version.  Skipping.");
                             break;
                         }
 
@@ -456,7 +456,7 @@ namespace LootGainLib.Parsers
                             }
                         }
 
-                        System.Console.WriteLine("Done with source.");
+                        //System.Console.WriteLine("Done with source.");
                         dataSources.Add(currentSource);
                         state = FileParserState.InSources;
 
@@ -464,7 +464,7 @@ namespace LootGainLib.Parsers
                     case FileParserState.RunOutSource:
                         if (line.StartsWith(@"		}"))
                         {
-                            System.Console.WriteLine("Done with source.");
+                            //System.Console.WriteLine("Done with source.");
                             state = FileParserState.InSources;
                             break;
                         }
