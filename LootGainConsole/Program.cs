@@ -19,6 +19,13 @@ namespace LootGainConsole
                 return;
             }
 
+            if (args.Length < 2)
+            {
+                System.Console.WriteLine("Must provide an item id as an argument.");
+                System.Console.ReadLine();
+                return;
+            }
+
             var parser = new FileParser();
             var sources = parser.Parse(args[0]);
 
@@ -27,6 +34,8 @@ namespace LootGainConsole
             var attributeValues = new AttributeValues();
             attributeValues.FindValues(sources);
             System.Console.WriteLine("Done finding attribute values.");
+
+
 
             System.Console.ReadLine();
         }

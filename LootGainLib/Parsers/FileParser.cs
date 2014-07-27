@@ -24,7 +24,7 @@ namespace LootGainLib.Parsers
 
         }
 
-        public List<DataSource> Parse(string fileName)
+        public DataSourcesCollection Parse(string fileName)
         {
             if (string.IsNullOrWhiteSpace(fileName))
             {
@@ -36,7 +36,7 @@ namespace LootGainLib.Parsers
                 throw new InvalidOperationException(string.Format("File '{0}' does not exist.", fileName));
             }
 
-            var dataSources = new List<DataSource>();
+            var dataSources = new DataSourcesCollection();
             DataSource currentSource = null;
 
             var simpleRegex = new Regex(@"\s+""?([^""]*)""?, --");

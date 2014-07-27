@@ -33,7 +33,7 @@ namespace LootGainLib
                 ValuesMap[attribute] = new Dictionary<object, int>();
             }
         }
-        public void FindValues(List<DataSource> sources)
+        public void FindValues(DataSourcesCollection sources)
         {
             int intValue;
             foreach (var source in sources)
