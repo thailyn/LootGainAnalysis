@@ -8,9 +8,9 @@ namespace LootGainLib.Model
 {
     public class Profession
     {
-        string Name { get; set; }
-        int? SkillLevel { get; set; }
-        int? MaxSkillLevel { get; set; }
-        int? SkillModifier { get; set; }
+        public string Name { get; set; }
+        public int? SkillLevel { get; set; }
+        public int? MaxSkillLevel { get; set; }
+        public int? SkillModifier { get; set; }
     }
 }

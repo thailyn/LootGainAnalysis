@@ -8,8 +8,8 @@ namespace LootGainLib.Model
 {
     public class Loot
     {
-        bool? IsCoin { get; set; }
-        int? Quantity { get; set; }
-        string ItemLink { get; set; }
+        public bool? IsCoin { get; set; }
+        public int? Quantity { get; set; }
+        public string ItemLink { get; set; }
     }
 }

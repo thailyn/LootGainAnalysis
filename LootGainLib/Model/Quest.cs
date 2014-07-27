@@ -8,7 +8,7 @@ namespace LootGainLib.Model
 {
     public class Quest
     {
-        int QuestId { get; set; }
-        string QuestName { get; set; }
+        public int QuestId { get; set; }
+        public string QuestName { get; set; }
     }
 }

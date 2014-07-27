@@ -8,48 +8,48 @@ namespace LootGainLib.Model
 {
     public class DataSource
     {
-        int DataVersion { get; set; }
-        string Build { get; set; }
-        double Time { get; set; }
+        public int DataVersion { get; set; }
+        public string Build { get; set; }
+        public double Time { get; set; }
 
-        string PlayerName { get; set; }
-        string RealmName { get; set; }
-        string PlayerRace { get; set; }
-        int PlayerSex { get; set; }
-        string PlayerClass { get; set; }
-        int PlayerLevel { get; set; }
-        int? PlayerSpecialization { get; set; }
+        public string PlayerName { get; set; }
+        public string RealmName { get; set; }
+        public string PlayerRace { get; set; }
+        public int PlayerSex { get; set; }
+        public string PlayerClass { get; set; }
+        public int PlayerLevel { get; set; }
+        public int? PlayerSpecialization { get; set; }
 
-        bool InParty { get; set; }
-        bool inRaid { get; set; }
+        public bool InParty { get; set; }
+        public bool inRaid { get; set; }
 
-        string ZoneName { get; set; }
-        string SubZoneName { get; set; }
+        public string ZoneName { get; set; }
+        public string SubZoneName { get; set; }
 
-        string GuildName { get; set; }
-        int? GuildLevel { get; set; }
+        public string GuildName { get; set; }
+        public int? GuildLevel { get; set; }
 
-        List<Quest> Quests { get; set; }
+        public List<Quest> Quests { get; set; }
 
-        List<Item> Items { get; set; }
+        public List<Item> Items { get; set; }
 
-        List<Profession> Professions { get; set; }
+        public List<Profession> Professions { get; set; }
 
-        List<Aura> Auras { get; set; }
+        public List<Aura> Auras { get; set; }
 
-        string Guid { get; set; }
-        string SourceName { get; set; }
-        int? SourceLevel { get; set; }
-        string SourceClass { get; set; }
-        int? SourceRace { get; set; }
-        int? SourceSex { get; set; }
-        string SourceClassification { get; set; }
-        string SourceCreatureFamily { get; set; }
-        string SourceCreatureType { get; set; }
-        bool SourceIsPlayer { get; set; }
+        public string Guid { get; set; }
+        public string SourceName { get; set; }
+        public int? SourceLevel { get; set; }
+        public string SourceClass { get; set; }
+        public int? SourceRace { get; set; }
+        public int? SourceSex { get; set; }
+        public string SourceClassification { get; set; }
+        public string SourceCreatureFamily { get; set; }
+        public string SourceCreatureType { get; set; }
+        public bool SourceIsPlayer { get; set; }
 
-        string LootType { get; set; }
-        List<Loot> Loot { get; set; }
+        public string LootType { get; set; }
+        public List<Loot> Loot { get; set; }
 
         public DataSource()
         {

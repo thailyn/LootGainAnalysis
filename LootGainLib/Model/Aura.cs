@@ -8,10 +8,10 @@ namespace LootGainLib.Model
 {
     public class Aura
     {
-        string Name { get; set; }
-        int? Rank { get; set; }
-        int? Count { get; set; }
-        int? SpellId { get; set; }
-        string Caster { get; set; }
+        public string Name { get; set; }
+        public string Rank { get; set; } // string because "rank" can be something like "Special Ability"
+        public int? Count { get; set; }
+        public int? SpellId { get; set; }
+        public string Caster { get; set; }
     }
 }
