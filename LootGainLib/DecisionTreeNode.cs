@@ -104,7 +104,7 @@ namespace LootGainLib
             Sources.DivideOnAttribute(bestAttribute, bestAttributeValue, attributeValues.ValuesMap[bestAttribute],
                 out splits);
 
-            foreach (var split in splits)
+            Parallel.ForEach(splits, split =>
             {
                 split.Value.UseAttributesWithValues = Sources.UseAttributesWithValues;
 
@@ -115,10 +115,14 @@ namespace LootGainLib
                     ParentSplitAttribute = SplitAttribute,
                     ParentSplitAttributeValue = split.Key,
                 };
-                                
-                Children.Add(split.Key, child);
+
+                lock(Children)
+                {
+                    Children.Add(split.Key, child);
+                }
+
                 child.CreateChildrenOnItemId(itemId, attributeValues);
-            }
+            });
         }
 
         public override string ToString()

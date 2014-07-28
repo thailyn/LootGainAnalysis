@@ -157,7 +157,7 @@ namespace LootGainLib
                             break;
                         }
 
-                        foreach (int quest in attributeValues.ValuesMap[LootGainLib.Attribute.Quest].Keys)
+                        Parallel.ForEach(attributeValues.ValuesMap[LootGainLib.Attribute.Quest].Keys, quest =>
                         {
                             var questInformationGain = this.InformationGainOnItemId(itemId, attribute, quest,
                                 attributeValues.ValuesMap[attribute]);
@@ -178,7 +178,7 @@ namespace LootGainLib
                             }
                             //System.Console.WriteLine("Information gain on quest {0}: {1}", quest,
                             //    questInformationGain);
-                        }
+                        });
                         break;
                     case LootGainLib.Attribute.Loot:
                         break;
