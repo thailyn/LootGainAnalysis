@@ -211,5 +211,18 @@ namespace LootGainLib
 
             return bestInformationGain;
         }
+
+        public DataSourcesCollection()
+        {
+
+        }
+
+        public DataSourcesCollection(IEnumerable<DataSource> other)
+        {
+            foreach (var item in other)
+            {
+                this.Add(item);
+            }
+        }
     }
 }
