@@ -10,41 +10,13 @@ namespace LootGainConsole
 {
     class Program
     {
-        static void Main(string[] args)
+        static void PrintSingleItem(int itemId, DataSourcesCollection sources, AttributeValues attributeValues)
         {
-            if (args.Length < 1)
-            {
-                System.Console.WriteLine("Must provide a file name as an argument.");
-                System.Console.ReadLine();
-                return;
-            }
-
-            var parser = new FileParser();
-            var sources = parser.Parse(args[0]);
-            sources.UseAttributesWithValues = false;
-
-            System.Console.WriteLine("Done parsing.  Parsed {0} data sources.", sources.Count);
-
-            var attributeValues = new AttributeValues();
-            attributeValues.FindValues(sources);
-            System.Console.WriteLine("Done finding attribute values.");
-
-            int itemId;
-            if (args.Length < 2)
-            {
-                var rand = new Random();
-                int index = rand.Next(attributeValues.ValuesMap[LootGainLib.Attribute.Loot].Keys.Count);
-                itemId = (int)attributeValues.ValuesMap[LootGainLib.Attribute.Loot].Keys.ToList()[index];
-            }
-            else
-            {
-                itemId = int.Parse(args[1]);
-            }
-
             var loot = from s in sources
                        from l in s.Loot
                        where !string.IsNullOrWhiteSpace(l.ItemLink)
-                       where l.ItemLink.Contains("item:" + itemId.ToString() + ":")
+                       where (l.ItemLink.Contains("item:" + itemId.ToString() + ":")
+                                || l.ItemLink.Contains("currency:" + itemId.ToString() + "|"))
                        select l;
             var singleLoot = loot.FirstOrDefault();
 
@@ -55,7 +27,7 @@ namespace LootGainConsole
             }
 
             var item = ItemInfo.ParseItemString(singleLoot.ItemLink);
-            System.Console.WriteLine("Item id: {0}, Item Name: {1}", item.Id, item.Name);
+            System.Console.WriteLine("Loot Type: {0}, Id: {1}, Item Name: {2}", item.LinkType, item.Id, item.Name);
             //itemId = 6303;
             //itemId = 45191;
             //itemId = 82261;
@@ -90,6 +62,79 @@ namespace LootGainConsole
             };
             rootNode.CreateChildrenOnItemId(itemId, attributeValues);
             rootNode.ConsolePrint(string.Empty);
+        }
+
+        static void PrintSingleSource(string sourceName, DataSourcesCollection sources)
+        {
+            var singleSourceSources = from s in sources
+                                      where s.SourceName == sourceName
+                                      select s;
+            var localSources = new DataSourcesCollection(singleSourceSources);
+
+            var attributeValues = new AttributeValues();
+            attributeValues.FindValues(localSources);
+
+            var allLoot = attributeValues.ValuesMap[LootGainLib.Attribute.Loot].Keys.ToList();
+            System.Console.WriteLine("Loot for source '{0}' ({1} loot item(s); looted {2} time(s)).", sourceName, allLoot.Count, localSources.Count);
+            foreach (int itemId in allLoot)
+            {
+                PrintSingleItem(itemId, localSources, attributeValues);
+                System.Console.WriteLine();
+            }
+        }
+
+
+        static void Main(string[] args)
+        {
+            if (args.Length < 1)
+            {
+                System.Console.WriteLine("Must provide a file name as an argument.");
+                System.Console.ReadLine();
+                return;
+            }
+
+            System.Console.WriteLine("Parsing file '{0}'.", args[0]);
+            var parser = new FileParser();
+            var sources = parser.Parse(args[0]);
+            sources.UseAttributesWithValues = false;
+
+            System.Console.WriteLine("Done parsing.  Parsed {0} data sources.", sources.Count);
+
+            var attributeValues = new AttributeValues();
+            attributeValues.FindValues(sources);
+            System.Console.WriteLine("Done finding attribute values.");
+            System.Console.WriteLine();
+
+            int itemId;
+            if (args.Length < 2)
+            {
+                var rand = new Random();
+                int index = rand.Next(attributeValues.ValuesMap[LootGainLib.Attribute.Loot].Keys.Count);
+                itemId = (int)attributeValues.ValuesMap[LootGainLib.Attribute.Loot].Keys.ToList()[index];
+            }
+            else
+            {
+                itemId = int.Parse(args[1]);
+            }
+
+            PrintSingleItem(itemId, sources, attributeValues);
+            System.Console.WriteLine();
+            System.Console.WriteLine();
+
+            string sourceName;
+            if (args.Length < 3)
+            {
+                var rand = new Random();
+                int index = rand.Next(attributeValues.ValuesMap[LootGainLib.Attribute.SourceName].Keys.Count);
+                sourceName = (string)attributeValues.ValuesMap[LootGainLib.Attribute.SourceName].Keys.ToList()[index];
+            }
+            else
+            {
+                sourceName = args[2];
+            }
+
+            PrintSingleSource(sourceName, sources);
+
 
             System.Console.ReadLine();
         }
