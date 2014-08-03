@@ -67,7 +67,8 @@ namespace LootGainLib.Model
                 if (loot.ItemLink != null)
                 {
                     var itemInfo = ItemInfo.ParseItemString(loot.ItemLink);
-                    if (itemInfo.LinkType == LinkType.Item)
+                    if (itemInfo.LinkType == LinkType.Item
+                        || itemInfo.LinkType == LinkType.Currency)
                     {
                         if (itemInfo.Id == itemId)
                         {
