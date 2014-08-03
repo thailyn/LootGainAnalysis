@@ -19,13 +19,6 @@ namespace LootGainConsole
                 return;
             }
 
-            if (args.Length < 2)
-            {
-                System.Console.WriteLine("Must provide an item id as an argument.");
-                System.Console.ReadLine();
-                return;
-            }
-
             var parser = new FileParser();
             var sources = parser.Parse(args[0]);
             sources.UseAttributesWithValues = false;
@@ -36,10 +29,18 @@ namespace LootGainConsole
             attributeValues.FindValues(sources);
             System.Console.WriteLine("Done finding attribute values.");
 
-            var rand = new Random();
-            int index = rand.Next(attributeValues.ValuesMap[LootGainLib.Attribute.Loot].Keys.Count);
-            int itemId = (int)attributeValues.ValuesMap[LootGainLib.Attribute.Loot].Keys.ToList()[index];
-            var loot = (from s in sources
+            int itemId;
+            if (args.Length < 2)
+            {
+                var rand = new Random();
+                int index = rand.Next(attributeValues.ValuesMap[LootGainLib.Attribute.Loot].Keys.Count);
+                itemId = (int)attributeValues.ValuesMap[LootGainLib.Attribute.Loot].Keys.ToList()[index];
+            }
+            else
+            {
+                itemId = int.Parse(args[1]);
+            }
+
                        from l in s.Loot
                        where !string.IsNullOrWhiteSpace(l.ItemLink)
                        where l.ItemLink.Contains(itemId.ToString())
