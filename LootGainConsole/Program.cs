@@ -41,18 +41,27 @@ namespace LootGainConsole
                 itemId = int.Parse(args[1]);
             }
 
+            var loot = from s in sources
                        from l in s.Loot
                        where !string.IsNullOrWhiteSpace(l.ItemLink)
-                       where l.ItemLink.Contains(itemId.ToString())
-                       select l).FirstOrDefault();
-            var item = ItemInfo.ParseItemString(loot.ItemLink);
+                       where l.ItemLink.Contains("item:" + itemId.ToString() + ":")
+                       select l;
+            var singleLoot = loot.FirstOrDefault();
+
+            if (singleLoot == null)
+            {
+                System.Console.WriteLine("No known item with item id '{0}'.", itemId);
+                return;
+            }
+
+            var item = ItemInfo.ParseItemString(singleLoot.ItemLink);
             System.Console.WriteLine("Item id: {0}, Item Name: {1}", item.Id, item.Name);
             //itemId = 6303;
             //itemId = 45191;
             //itemId = 82261;
 
             //int itemId = int.Parse(args[1]);
-            var entropy = sources.EntropyOnItemId(itemId);
+            var entropy = sources.EntropyOnItemId(item.Id);
             System.Console.WriteLine("Base entropy: {0}", entropy);
 
             /*
