@@ -17,6 +17,7 @@ namespace LootGainConsole
                        where !string.IsNullOrWhiteSpace(l.ItemLink)
                        where (l.ItemLink.Contains("item:" + itemId.ToString() + ":")
                                 || l.ItemLink.Contains("currency:" + itemId.ToString() + "|"))
+                                || (itemId == 0 && l.IsCoin.HasValue && l.IsCoin.Value)
                        select l;
             var singleLoot = loot.FirstOrDefault();
 

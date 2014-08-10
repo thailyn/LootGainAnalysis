@@ -447,6 +447,11 @@ namespace LootGainLib.Parsers
                                         }
                                     }
 
+                                    if (loot.IsCoin.HasValue && loot.IsCoin.Value)
+                                    {
+                                        loot.ItemLink = "Coin";
+                                    }
+
                                     // looted
                                     //nextLine = reader.ReadLine();
 

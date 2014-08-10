@@ -27,6 +27,16 @@ namespace LootGainLib
                 throw new ArgumentNullException();
             }
 
+            if (itemString == "Coin")
+            {
+                return new ItemInfo
+                {
+                    Id = 0,
+                    Name = "Coin",
+                    LinkType = LinkType.Item,
+                };
+            }
+
             Regex itemStringRegex = new Regex(@"\|?c?f?f?([0-9a-fA-F]*)\|?H?([^:]*):?(\d+):?(\d*):?(\d*):?(\d*):?(\d*):?(\d*):?(\-?\d*):?(\-?\d*):?(\d*):?(\d*):?(\-?\d*)\|?h?\[?([^\[\]]*)\]?\|?h?\|?r?");
             var match = itemStringRegex.Match(itemString);
 
